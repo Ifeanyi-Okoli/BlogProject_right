@@ -1,0 +1,48 @@
+{% extends "blog/base.html" %}  <!-- Extends the base.html template -->
+
+{% load static %}  <!-- Loads static files -->
+
+{% block title %}  <!-- Defines the title block -->
+    Categories!
+{% endblock %}  <!-- Ends the title block -->
+
+{% block content %}  <!-- Defines the content block -->
+    
+{% if category_posts %}  <!-- Checks if category_posts exists -->
+
+    <h1> {{ cats }} Category... <h1>  <!-- Displays the category name -->
+
+    <ul>  <!-- Starts an unordered list -->
+
+      {% for post in cat_menu_list %}  <!-- Iterates over each post in category_posts -->
+
+      <li>  <!-- Starts a list item -->
+
+        <a href="{% url 'article-detail' post.pk %}"> {{post.title}}  </a> -  <!-- Displays the post title with a link to article-detail view -->
+        {{post.author.first_name}}   {{ post.author.last_name}} -  <!-- Displays the post author's first and last name -->
+        {{post.category}} |  {{post.post_date}}  <!-- Displays the post category and post date -->
+        <br>  <!-- Adds a line break -->
+
+        <small>  <!-- Starts a small text block -->
+
+        {% if user.is_authenticated %}  <!-- Checks if the user is authenticated -->
+            <a href="{% url 'update_post' post.pk %}">(Edit)</a> | <a href="{% url 'delete_post' post.pk %}">(Delete)</a>  <!-- Displays edit and delete links for authenticated users -->
+        {% endif %}
+
+        </small><br>  <!-- Ends the small text block and adds a line break -->
+
+        {{ post.body | slice:":100"| safe }}  <!-- Displays a portion of the post body, limited to 100 characters -->
+
+      </li>  <!-- Ends the list item -->
+
+      {% endfor %}  <!-- Ends the for loop -->
+
+    </ul>  <!-- Ends the unordered list -->
+
+{% else %}  <!-- If category_posts doesn't exist -->
+
+    <h1> Sorry, this category does not exist yet... </h1>  <!-- Displays a message indicating the category doesn't exist -->
+
+{% endif %}  <!-- Ends the if statement -->
+
+{% endblock %}  <!-- Ends the content block -->
